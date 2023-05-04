@@ -1,0 +1,29 @@
+def left(i):
+    return 2*i
+
+def right(i):
+    return 2*i + 1
+
+def parent(i):
+    return i//2
+
+def max_heapify(a, heap_size, i):
+    l = left(i)
+    r = right(i)
+
+    largest = i 
+
+    if l < heap_size and a[l] > a[i]:
+        largest = l
+    
+    if r < heap_size and a[r] > a[largest]:
+        largest = r 
+    
+    if largest != i:
+        a[i], a[largest] = a[largest], a[i] # swap elements
+        max_heapify(a, heap_size, largest)
+
+def build_max_heap(a):
+    heap_size = len(a)
+    for i in range(heap_size//2, 0, -1): # bottom up approach
+        max_heapify(a, heap_size, i)

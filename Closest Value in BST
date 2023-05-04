@@ -1,0 +1,33 @@
+# average: O(log(n)) time | O(1) space
+# worst: O(n) time | O(1) space
+
+def findClosestValueInBst(tree, target):
+    closest = tree.value
+    while tree is not None:
+        if abs(target - tree.value) < abs(target - closest):
+            closest = tree.value
+        
+        if target < tree.value:
+            tree = tree.left
+        elif target > tree.value:
+            tree = tree.right
+        else:
+            return closest # when difference between target and current node is 0
+    return closest
+
+class BST:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+        
+        root = BST(10)
+root.left = BST(5)
+root.left.left = BST(2)
+root.left.left.left = BST(1)
+root.left.right = BST(5)
+root.right = BST(15)
+root.right.left = BST(13)
+root.right.left.right = BST(14)
+root.right.right = BST(22)
+findClosestValueInBst(root, 12)

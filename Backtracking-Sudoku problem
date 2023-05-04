@@ -1,0 +1,70 @@
+def solveSudoku(board):
+	solveRemainingSudoku(0, 0, board)
+	return board
+
+def solveRemainingSudoku(row, col, board):
+	currentRow = row
+	currentCol = col
+	
+	lastCol = len(board[currentRow])
+	lastRow = len(board)
+	
+	if currentCol == lastCol: # If we reached last column, then move to next row
+		currentRow += 1
+		currentCol = 0
+		if currentRow == lastRow:
+			return True # board is completed
+		
+	if board[currentRow][currentCol] == 0: # since its 0, we need to fill this box
+		return tryDigitsAtPosition(currentRow, currentCol, board)
+	
+	return solveRemainingSudoku(currentRow, currentCol+1, board) # we can skip this box, because its already filled by default
+		
+	
+def tryDigitsAtPosition(row, col, board):
+	for digit in range(1, 10):
+		if isValidAtPostion(digit, row, col, board):
+			board[row][col] = digit 
+			if solveRemainingSudoku(row, col+1, board): # with this digit in position, can we solve the board
+				return True
+	
+	board[row][col] = 0 # if we are not able to fit 0-9, we reset the current position with 0
+	return False
+	
+	
+def isValidAtPostion(value, row, col, board):
+	# check validity comparing with row, col, and subgrid
+	
+	rowIsValid = value not in board[row] 
+	columnIsValid = value not in map(lambda r: r[col], board)
+	
+	if not rowIsValid or not columnIsValid:
+		return False
+	
+	# check subgrid constraint
+	subGridRowStart = (row // 3) * 3 # starting row of the subgrid. For eg if row 2 then its subgrid starts from 0th row, similarly if row =6 then subgrid starts from 6, similarly if row = 8 the subgrid start at 60 
+	subGridColStart = (col // 3) * 3 # starting col of the subgrid
+	
+	for rowIdx in range(3):
+		for colIdx in range(3):
+			rowToCheck = subGridRowStart + rowIdx # if subGridRowStart==6, then we will check 6,7,8 rows
+			colToCheck = subGridColStart + colIdx
+			existingValueInBoard = board[rowToCheck][colToCheck]
+			if value == existingValueInBoard:
+				return False
+	return True
+
+
+input = [
+	[7, 8, 0, 4, 0, 0, 1, 2, 0],
+	[6, 0, 0, 0, 7, 5, 0, 0, 9],
+	[0, 0, 0, 6, 0, 1, 0, 7, 8],
+	[0, 0, 7, 0, 4, 0, 2, 6, 0],
+	[0, 0, 1, 0, 5, 0, 9, 3, 0],
+	[9, 0, 4, 0, 6, 0, 0, 0, 5],
+	[0, 7, 0, 3, 0, 0, 0, 1, 2],
+	[1, 2, 0, 0, 0, 7, 4, 0, 0],
+	[0, 4, 9, 2, 0, 6, 0, 0, 7],
+]
+
+solveSudoku(input)

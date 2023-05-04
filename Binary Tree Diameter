@@ -1,0 +1,45 @@
+# O(n) time | O(h) space
+
+"""
+Need to find the diameter which is longest path in a tree 
+i.e We need to determine the length of the longest path
+"""
+
+class BinaryTree:
+    def __init__(self, value, left=None, right=None):
+        self.value = value
+        self.left = left
+        self.right = right
+    
+class TreeInfo:
+    def __init__(self, diameter, height):
+        self.diameter = diameter
+        self.height = height
+
+def binaryTreeDiameter(tree):
+    return getTreeInfo(tree).diameter
+
+def getTreeInfo(tree):
+    if tree is None:
+        return TreeInfo(0,0)
+    
+    leftTreeInfo = getTreeInfo(tree.left)
+    rightTreeInfo = getTreeInfo(tree.right)
+    
+    longestPathThroughRoot = leftTreeInfo.height + rightTreeInfo.height
+    maxDiaSoFar = max(leftTreeInfo.diameter, rightTreeInfo.diameter)
+    currentDia = max(longestPathThroughRoot, maxDiaSoFar)
+    currentHeight = 1 + max(leftTreeInfo.height, rightTreeInfo.height)
+    
+    return TreeInfo(currentDia, currentHeight)
+    root = BinaryTree(1)
+root.left = BinaryTree(3)
+root.left.left = BinaryTree(7)
+root.left.left.left = BinaryTree(8)
+root.left.left.left.left = BinaryTree(9)
+root.left.right = BinaryTree(4)
+root.left.right.right = BinaryTree(5)
+root.left.right.right.right = BinaryTree(6)
+root.right = BinaryTree(2)
+expected = 6
+binaryTreeDiameter(root)

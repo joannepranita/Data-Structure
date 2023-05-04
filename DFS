@@ -1,0 +1,30 @@
+# for every node, we're going to add thats nodes name to the final array,
+# and then for every child node that that node has, we're gonna call DFS
+class Node:
+    def __init__(self, name):
+        self.children = []
+        self.name = name
+
+    # helper func to add elements to the graph
+    def addChild(self, name):
+        self.children.append(Node(name))
+        return self
+
+    # O(v + e) time | O(v+v) = O(2v) = O(v) space | v is vertex, e is edge
+    # O(v + e) time because:
+    # v -> we're iterating all vertexes, and adding to the list
+    # e i.e child nodes -> for every vertex, we iterate through the child nodes and we call DFS
+    def depthFirstSearch(self, array):
+        array.append(self.name)
+        for child in self.children:
+            child.depthFirstSearch(array)
+        return array
+        
+        graph = Node("A")
+graph.addChild("B").addChild("C").addChild("D")
+graph.children[0].addChild("E").addChild("F")
+graph.children[2].addChild("G").addChild("H")
+graph.children[0].children[1].addChild("I").addChild("J")
+graph.children[2].children[0].addChild("K")
+
+graph.depthFirstSearch([])
